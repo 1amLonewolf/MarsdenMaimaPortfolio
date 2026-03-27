@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Create Favicon</title>
+  <style>
+    canvas { border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h3>Click anywhere to download the rounded favicon</h3>
+  <canvas id="canvas" width="512" height="512"></canvas>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = 'logo.png';
+    img.onload = () => {
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Create circular clipping path
+      ctx.beginPath();
+      ctx.arc(256, 256, 256, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.clip();
+      
+      // Draw image
+      ctx.drawImage(img, 0, 0, 512, 512);
+      
+      // Add glow effect
+      ctx.beginPath();
+      ctx.arc(256, 256, 256, 0, Math.PI * 2, true);
+      ctx.lineWidth = 20;
+      ctx.strokeStyle = '#0066ff';
+      ctx.stroke();
+      ctx.closePath();
+    };
+    
+    canvas.addEventListener('click', () => {
+      const link = document.createElement('a');
+      link.download = 'favicon-rounded.png';
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+Service ID:service_vn5m1ib
+Template ID:template_9xiivtl
+AUTOREPLY Template ID: template_1llu75e
+Pubblic API KEY: jnxg0CAWjgquu2Ssn
