@@ -1077,6 +1077,18 @@ textarea.form-control {
   font-weight: 500;
 }
 
+/* Honeypot Field - Hidden from humans */
+.honeypot-field {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+}
+
 .form-status.success {
   background: rgba(0, 255, 136, 0.1);
   border: 1px solid var(--success-green);

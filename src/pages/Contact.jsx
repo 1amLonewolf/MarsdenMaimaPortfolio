@@ -22,13 +22,17 @@ function Contact() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    message: ''
+    message: '',
+    phone: '' // Honeypot field (hidden from humans)
   })
   
   const [formStatus, setFormStatus] = useState({
     type: '', // 'success' | 'error' | 'loading'
     message: ''
   })
+
+  // Simple spam prevention: track submission time
+  const [submissionTime, setSubmissionTime] = useState(null)
 
   // EmailJS configuration from environment variables
   const emailJsConfig = {
@@ -55,8 +59,44 @@ function Contact() {
     }
   }
 
+  // Spam detection: Check if form was filled too quickly (bot behavior)
+  const isPotentialSpam = () => {
+    const timeToFill = Date.now() - submissionTime
+    // If filled in less than 3 seconds, likely a bot
+    if (submissionTime && timeToFill < 3000) {
+      return true
+    }
+    // If honeypot field is filled, definitely a bot
+    if (formData.phone && formData.phone.trim() !== '') {
+      return true
+    }
+    return false
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
+    
+    // Record submission time for spam detection
+    if (!submissionTime) {
+      setSubmissionTime(Date.now())
+    }
+    
+    // Check for spam
+    if (isPotentialSpam()) {
+      console.warn('🛡️ Spam detected! Form submission blocked.')
+      // Silently succeed to confuse bots
+      setFormStatus({
+        type: 'success',
+        message: "Thank you! Your message has been sent. I'll get back to you within 24 hours."
+      })
+      setFormData({
+        name: '',
+        email: '',
+        message: '',
+        phone: ''
+      })
+      return
+    }
     
     // Set loading state
     setFormStatus({
@@ -242,6 +282,23 @@ function Contact() {
                 <p className="text-muted mb-4">
                   Tell me about your project. The more details you share, the better I can help!
                 </p>
+
+                {/* Honeypot Field - Hidden from humans, bots will fill it */}
+                <div className="honeypot-field" aria-hidden="true">
+                  <label htmlFor="phone">
+                    Leave this field empty - it's for spam bots 🤖
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    tabIndex="-1"
+                    autoComplete="off"
+                  />
+                </div>
 
                 {/* Status Messages */}
                 {formStatus.message && (
