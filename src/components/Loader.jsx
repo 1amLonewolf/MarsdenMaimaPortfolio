@@ -2,23 +2,31 @@ import { useEffect, useState } from 'react'
 
 /**
  * Loader Component
- * 
+ *
  * Displays a loading animation with the wolf logo while the app initializes.
  * Automatically fades out after content is ready.
+ * 
+ * @param {boolean} isLoading - Optional prop to control loader visibility externally.
+ *                              If not provided, auto-hides after 1.5 seconds.
  */
-function Loader() {
+function Loader({ isLoading }) {
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
-    // Fade out loader after content is ready
-    const timer = setTimeout(() => {
-      setIsLoaded(true)
-    }, 1500) // Show loader for 1.5 seconds minimum
+    // Auto-hide only if isLoading prop is not provided
+    if (isLoading === undefined) {
+      const timer = setTimeout(() => {
+        setIsLoaded(true)
+      }, 1500) // Show loader for 1.5 seconds minimum
 
-    return () => clearTimeout(timer)
-  }, [])
+      return () => clearTimeout(timer)
+    }
+  }, [isLoading])
 
-  if (isLoaded) return null
+  // If isLoading prop is provided, use it; otherwise use internal state
+  const shouldHide = isLoading !== undefined ? !isLoading : isLoaded
+  
+  if (shouldHide) return null
 
   return (
     <div className="loader-container">

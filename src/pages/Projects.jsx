@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Helmet } from 'react-helmet-async'
+import Loader from '../components/Loader'
 
 /**
  * Projects Component
- * 
+ *
  * Displays:
  * - Featured projects with detailed impact statements
  * - Live GitHub repositories fetched from API
  * - Professional project cards with tech stacks
- * 
+ *
  * TODO: Replace featured projects with your actual work
  */
 function Projects() {
@@ -195,11 +196,8 @@ function Projects() {
             </h3>
 
             {loading ? (
-              <div className="text-center py-5 animate-fade-in">
-                <div className="spinner-border" role="status">
-                  <span className="visually-hidden">Loading repositories...</span>
-                </div>
-                <p className="mt-3 text-muted">Fetching my latest work...</p>
+              <div className="py-5">
+                <Loader isLoading={loading} />
               </div>
             ) : error ? (
               <div className="text-center py-5 animate-fade-in">
