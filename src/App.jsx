@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { HelmetProvider } from 'react-helmet-async'
 import { Analytics } from '@vercel/analytics/react'
+import { SpeedInsights } from '@vercel/speed-insights/react'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Loader from './components/Loader'
@@ -40,6 +41,9 @@ function App() {
         
         {/* Vercel Analytics */}
         <Analytics />
+        
+        {/* Vercel Speed Insights */}
+        <SpeedInsights />
       </Router>
     </HelmetProvider>
   )
